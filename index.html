@@ -28,18 +28,19 @@
   });
 </script>
 
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2042 Arcade - 雷霆戰機 🛦</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2042 Arcade - 雷霆戰機</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Press Start 2P', monospace, sans-serif;
-            background-color: #050508;
+            background-color: #030712;
             color: #f3f4f6;
             user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
             overflow: hidden;
         }
         .arcade-shadow {
@@ -61,7 +62,7 @@
         }
         .retro-btn {
             background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
-            border: 3px solid #f87171;
+            border: 2px solid #f87171;
             box-shadow: 0 4px 0 #7f1d1d, 0 6px 12px rgba(0,0,0,0.6);
             transition: all 0.1s ease;
             cursor: pointer;
@@ -84,37 +85,53 @@
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center h-screen w-screen m-0 p-0 overflow-hidden">
+<body class="flex flex-col items-center justify-center h-screen w-screen m-0 p-0 overflow-hidden bg-slate-950">
 
-    <div id="game-container" class="relative w-full max-w-[480px] h-full max-h-[880px] bg-slate-900 border-4 border-red-600 rounded-lg arcade-shadow flex flex-col overflow-hidden">
+    <div id="game-container" class="relative w-full max-w-[480px] h-full max-h-[900px] bg-slate-900 border-0 md:border-4 border-red-600 rounded-none md:rounded-lg arcade-shadow flex flex-col overflow-hidden">
         
-        <!-- Top HUD Info Bar (Strictly placed above progress bar) -->
-        <div class="bg-black bg-opacity-95 px-3 py-2 border-b-2 border-red-800 flex justify-between items-center text-[10px] md:text-xs z-30">
-            <div>
-                <span class="text-yellow-400">SCORE:</span> <span id="hud-score" class="text-white">000000</span>
+        <!-- UNIFIED TOP HUD (All UI controls & info consolidated at the top) -->
+        <div class="bg-black/95 px-2.5 py-1.5 border-b-2 border-red-800 flex flex-col gap-1 z-30 shrink-0">
+            <!-- Row 1: Score, Stage, Life, Pause Button -->
+            <div class="flex justify-between items-center text-[10px] md:text-xs">
+                <div>
+                    <span class="text-yellow-400">得分:</span> <span id="hud-score" class="text-white">000000</span>
+                </div>
+                <div>
+                    <span class="text-red-400">關卡:</span> <span id="hud-stage" class="text-white">1/5</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="text-green-400">生命:</span>
+                    <div id="hud-lives" class="flex gap-0.5 text-red-500">❤️❤️❤️</div>
+                </div>
+                <button id="btn-pause-toggle" class="bg-slate-800 border border-slate-600 text-yellow-300 text-[9px] px-2 py-0.5 rounded active:bg-slate-700">
+                    暫停 ⏸️
+                </button>
             </div>
-            <div>
-                <span class="text-red-400">STAGE:</span> <span id="hud-stage" class="text-white">1/5</span>
+
+            <!-- Row 2: Weapon Level & Mode Description -->
+            <div class="flex justify-between items-center text-[9px] md:text-[10px] bg-slate-900/80 px-2 py-1 rounded border border-slate-800">
+                <div class="text-yellow-400 font-bold">
+                    武器: <span id="hud-weapon" class="text-white font-bold">Lv.1</span>
+                </div>
+                <div class="text-blue-400 truncate max-w-[280px]">
+                    <span id="hud-options" class="text-slate-300">標準雙發射擊</span>
+                </div>
             </div>
-            <div class="flex items-center gap-1">
-                <span class="text-green-400">LIFE:</span>
-                <div id="hud-lives" class="flex gap-1 text-red-500">❤️❤️❤️</div>
+
+            <!-- Row 3: Boss Progress Bar with Percentage & BOSS Tag -->
+            <div class="relative w-full bg-slate-950 border border-slate-800 h-4 rounded-sm flex items-center px-0.5 overflow-hidden">
+                <div id="progress-bar" class="bg-gradient-to-r from-blue-600 via-indigo-500 to-red-600 h-2 rounded-sm transition-all duration-150 w-0"></div>
+                <div class="absolute inset-0 flex justify-between items-center px-2 text-[8px] font-bold pointer-events-none">
+                    <span id="progress-text" class="text-cyan-300 drop-shadow">0%</span>
+                    <span class="bg-red-600 text-yellow-300 px-1 py-0.2 rounded text-[7px] tracking-wider animate-pulse border border-yellow-400">BOSS ➔</span>
+                </div>
             </div>
         </div>
 
-        <!-- Stage Progress Bar with Percentage & BOSS Tag -->
-        <div class="relative w-full bg-slate-950 border-b border-slate-700 h-5 z-25 flex items-center px-1">
-            <div id="progress-bar" class="bg-gradient-to-r from-blue-600 via-indigo-500 to-red-600 h-2.5 rounded-sm transition-all duration-150 w-0"></div>
-            <div class="absolute inset-0 flex justify-between items-center px-3 text-[9px] font-bold pointer-events-none">
-                <span id="progress-text" class="text-cyan-300 drop-shadow">0%</span>
-                <span class="bg-red-600 text-yellow-300 px-1.5 py-0.5 rounded text-[8px] tracking-wider animate-pulse border border-yellow-400">BOSS ➔</span>
-            </div>
-        </div>
-
-        <!-- Boss Health Bar Container -->
-        <div id="boss-hud" class="hidden absolute top-16 left-4 right-4 bg-black bg-opacity-90 border-2 border-red-600 p-2 rounded z-35">
+        <!-- Boss Health Bar Container Overlay -->
+        <div id="boss-hud" class="hidden absolute top-28 left-3 right-3 bg-black/90 border-2 border-red-600 p-2 rounded z-35">
             <div class="flex justify-between text-[10px] text-red-400 mb-1">
-                <span id="boss-name">BOSS: IRON FORTRESS</span>
+                <span id="boss-name">BOSS: 鐵甲堡壘</span>
                 <span id="boss-hp-text">100%</span>
             </div>
             <div class="w-full bg-slate-900 h-3 rounded overflow-hidden border border-red-800">
@@ -122,9 +139,9 @@
             </div>
         </div>
 
-        <!-- Boss Warning Banner -->
-        <div id="boss-warning-banner" class="hidden absolute inset-x-0 top-32 bg-red-950 bg-opacity-95 border-y-4 border-yellow-400 py-3 text-center z-40 boss-warning-anim">
-            <div class="text-yellow-300 text-sm md:text-base font-bold tracking-widest">⚠️ 警告：BOSS逼近！⚠️</div>
+        <!-- Boss Warning Banner Overlay -->
+        <div id="boss-warning-banner" class="hidden absolute inset-x-0 top-36 bg-red-950/95 border-y-4 border-yellow-400 py-3 text-center z-40 boss-warning-anim">
+            <div class="text-yellow-300 text-sm md:text-base font-bold tracking-widest">⚠️ 警告：BOSS 逼近！⚠️</div>
             <div id="boss-warning-sub" class="text-[10px] text-white mt-1">準備迎戰</div>
         </div>
 
@@ -132,33 +149,33 @@
             <canvas id="gameCanvas" class="w-full h-full block"></canvas>
 
             <!-- Start Screen Overlay -->
-            <div id="screen-start" class="absolute inset-0 bg-black bg-opacity-92 flex flex-col items-center justify-center p-6 text-center z-50">
-                <div class="text-red-500 text-xl md:text-2xl font-bold mb-2 tracking-widest drop-shadow-[0_5px_5px_rgba(255,0,0,0.6)]">🛦 2042: 雷霆戰機 🛦</div>
-                <div class="text-[10px] text-yellow-400 mb-3">15級武器・閃電激光・通關獎勵</div>
-                <div class="text-[9px] text-slate-300 max-w-xs mb-5 space-y-1 leading-relaxed text-left bg-slate-900/90 p-3 rounded border border-slate-700">
-                    <p>🕹️ <span class="text-yellow-300">移動</span>：觸控拖拽 (<span class="text-cyan-400">防手指遮擋</span>)</p>
+            <div id="screen-start" class="absolute inset-0 bg-black/92 flex flex-col items-center justify-center p-5 text-center z-50">
+                <div class="text-red-500 text-xl md:text-2xl font-bold mb-2 tracking-widest drop-shadow-[0_4px_4px_rgba(255,0,0,0.6)]">2042: 雷霆戰機</div>
+                <div class="text-[10px] text-yellow-400 mb-3">15級武器・閃電激光・通關+1生命</div>
+                <div class="text-[9px] text-slate-300 max-w-xs mb-5 space-y-1.5 leading-relaxed text-left bg-slate-900/90 p-3.5 rounded-lg border border-slate-700">
+                    <p>🕹️ <span class="text-yellow-300">操作</span>：觸控拖拽 (<span class="text-cyan-400">手指</span>)</p>
                     <p>🔫 <span class="text-yellow-300">射擊</span>：<span class="text-green-400">全自動連續開火</span></p>
                     <p>🎁 <span class="text-yellow-300">POW</span>：擊落紅機獲取升級</p>
                     <p>✈️ <span class="text-yellow-300">僚機</span>：Lv.5 雙僚機；Lv.9 四僚機</p>
                     <p>⚡ <span class="text-yellow-300 font-bold">Lv.15</span>：解鎖<span class="text-yellow-300 font-bold">黃色閃電激光</span>持續轟炸！</p>
                     <p>❤️ <span class="text-yellow-300">獎勵</span>：<span class="text-green-400 font-bold">每關通關獎勵生命 +1！</span></p>
                 </div>
-                <button id="btn-start" class="retro-btn text-white font-bold py-3 px-8 rounded text-sm uppercase tracking-wider">
+                <button id="btn-start" class="retro-btn text-white font-bold py-3 px-8 rounded-lg text-sm uppercase tracking-wider">
                     開始戰鬥 START
                 </button>
             </div>
 
             <!-- Pause Menu Overlay -->
-            <div id="screen-pause" class="absolute inset-0 bg-black bg-opacity-80 hidden flex-col items-center justify-center p-6 text-center z-50">
+            <div id="screen-pause" class="absolute inset-0 bg-black/85 hidden flex-col items-center justify-center p-6 text-center z-50">
                 <div class="text-yellow-400 text-xl font-bold mb-6">遊戲暫停 PAUSED</div>
                 <div class="space-y-4">
-                    <button id="btn-resume" class="retro-btn text-white font-bold py-2 px-6 rounded text-xs">繼續遊戲 RESUME</button>
-                    <button id="btn-restart-pause" class="retro-btn text-white font-bold py-2 px-6 rounded text-xs bg-slate-700 border-slate-500">重新開始 RESTART</button>
+                    <button id="btn-resume" class="retro-btn text-white font-bold py-2.5 px-6 rounded text-xs">繼續遊戲 RESUME</button>
+                    <button id="btn-restart-pause" class="retro-btn text-white font-bold py-2.5 px-6 rounded text-xs bg-slate-700 border-slate-500">重新開始 RESTART</button>
                 </div>
             </div>
 
             <!-- Stage Clear Overlay -->
-            <div id="screen-stage-clear" class="absolute inset-0 bg-black bg-opacity-85 hidden flex-col items-center justify-center p-6 text-center z-50">
+            <div id="screen-stage-clear" class="absolute inset-0 bg-black/90 hidden flex-col items-center justify-center p-6 text-center z-50">
                 <div class="text-green-400 text-lg md:text-xl font-bold mb-2 animate-bounce">關卡完成 STAGE CLEAR!</div>
                 <div id="stage-clear-bonus" class="text-xs text-yellow-300 mb-2">獎勵分數: +5000</div>
                 <div id="stage-clear-life" class="text-xs text-green-300 mb-6 font-bold">❤️ 額外獎勵生命 +1</div>
@@ -166,26 +183,19 @@
             </div>
 
             <!-- Game Over Overlay -->
-            <div id="screen-gameover" class="absolute inset-0 bg-black bg-opacity-92 hidden flex-col items-center justify-center p-6 text-center z-50">
+            <div id="screen-gameover" class="absolute inset-0 bg-black/92 hidden flex-col items-center justify-center p-6 text-center z-50">
                 <div class="text-red-600 text-2xl font-bold mb-2 tracking-widest">GAME OVER</div>
                 <div class="text-xs text-slate-300 mb-6">最終得分: <span id="final-score" class="text-yellow-400">0</span></div>
                 <button id="btn-restart-over" class="retro-btn text-white font-bold py-3 px-8 rounded text-xs">再次挑戰 RETRY</button>
             </div>
 
             <!-- Victory Overlay -->
-            <div id="screen-victory" class="absolute inset-0 bg-black bg-opacity-95 hidden flex-col items-center justify-center p-6 text-center z-50">
-                <div class="text-yellow-400 text-xl md:text-2xl font-bold mb-3 animate-pulse">嘩嘩嘩！🏆 取得完全勝利! VICTORY!</div>
+            <div id="screen-victory" class="absolute inset-0 bg-black/95 hidden flex-col items-center justify-center p-6 text-center z-50">
+                <div class="text-yellow-400 text-xl md:text-2xl font-bold mb-3 animate-pulse">好叻呀 🏆 取得完全勝利! VICTORY!</div>
                 <div class="text-[10px] text-slate-300 mb-4">你已成功擊潰全部五大帝國艦隊與最終旗艦！</div>
                 <div class="text-xs text-green-400 mb-6">最終總得分: <span id="victory-score" class="text-white">0</span></div>
                 <button id="btn-restart-victory" class="retro-btn text-white font-bold py-3 px-8 rounded text-xs">凱旋重玩 PLAY AGAIN</button>
             </div>
-        </div>
-
-        <!-- Footer Bar -->
-        <div class="bg-black bg-opacity-95 px-4 py-2 border-t-2 border-red-800 flex justify-between items-center z-30">
-            <div class="text-[10px] text-yellow-400">武器等級: <span id="hud-weapon" class="text-white font-bold">Lv.1</span></div>
-            <div class="text-[10px] text-blue-400">火力配置: <span id="hud-options" class="text-slate-400">標準子彈</span></div>
-            <button id="btn-pause-toggle" class="bg-slate-800 border border-slate-600 text-white text-[10px] px-3 py-1 rounded hover:bg-slate-700">暫停</button>
         </div>
     </div>
 
@@ -318,7 +328,7 @@
         const totalStages = 5;
         let stageProgress = 0; 
         let stageTimer = 0;
-        const stageDuration = 2800; // 40% shorter duration
+        const stageDuration = 2800; // Fast-paced 40% shorter duration to boss
 
         const stagesConfig = [
             { id: 1, name: "熱帶叢林河谷", waterColor: "#1e3a8a", landColor: "#15803d", bossName: "巨型雙擎重轟炸機", bossHp: 90 },
@@ -373,10 +383,10 @@
             const scaleX = V_WIDTH / rect.width;
             const scaleY = V_HEIGHT / rect.height;
             const touchX = (e.clientX - rect.left) * scaleX;
-            // -115px vertical offset ensures fighter stays well above the finger for clear view
+            // Generous vertical offset (-115px) prevents finger from obscuring player plane
             const touchY = (e.clientY - rect.top) * scaleY - 115;
-            player.x += (touchX - (player.x + player.w/2)) * 0.4;
-            player.y += (touchY - (player.y + player.h/2)) * 0.4;
+            player.x += (touchX - (player.x + player.w/2)) * 0.45;
+            player.y += (touchY - (player.y + player.h/2)) * 0.45;
         }
 
         function drawPixelRect(ctx, x, y, w, h, color) {
@@ -422,7 +432,7 @@
                 renderCompanion(x + 70, y + 16);
             }
 
-            // Level 15 Ultimate Weapon: Yellow Lightning Laser Beam (黃色閃電激光)
+            // Level 15 Ultimate Weapon: Continuous Yellow Lightning Laser Beam
             if (p.weaponLevel >= 15) {
                 ctx.save();
                 const laserX = x + p.w / 2 - 3;
@@ -605,7 +615,7 @@
                 bullets.push({ x: player.x - 60, y: player.y + 16, w: 6, h: 14, dx: -1.5, dy: -13, fromPlayer: true });
                 bullets.push({ x: player.x + player.w + 54, y: player.y + 16, w: 6, h: 14, dx: 1.5, dy: -13, fromPlayer: true });
             } else {
-                // Level 15: Ultimate Multi-Spread + Yellow Lightning Laser
+                // Level 15: Ultimate Spread + Continuous Lightning Laser Beam
                 bullets.push({ x: px - 3, y: py, w: 8, h: 18, dx: 0, dy: -16, fromPlayer: true });
                 bullets.push({ x: px - 20, y: py, w: 6, h: 16, dx: -3.5, dy: -14, fromPlayer: true });
                 bullets.push({ x: px + 14, y: py, w: 6, h: 16, dx: 3.5, dy: -14, fromPlayer: true });
@@ -779,7 +789,6 @@
         }
 
         function dropPow(x, y, isPowRed = false) {
-            // 50% reduced POW drop rate per specs
             if (isPowRed && Math.random() < 0.25) {
                 powItems.push({ x: x, y: y, w: 24, h: 24, dy: 1.6 });
             } else if (!isPowRed && Math.random() < 0.075) {
@@ -835,7 +844,7 @@
                 if (p.life <= 0) particles.splice(i, 1);
             }
 
-            // Level 15 Lightning Laser continuous damage beam handling
+            // Level 15 Lightning Laser Beam collisions
             if (player.weaponLevel >= 15) {
                 const laserBox = { x: player.x + player.w/2 - 12, y: 0, w: 24, h: player.y };
                 if (activeBoss && rectIntersect(laserBox, activeBoss)) {
@@ -959,7 +968,7 @@
             const optEl = document.getElementById('hud-options');
             if (player.weaponLevel >= 15) {
                 optEl.innerText = "⚡ Lv.15 閃電激光究極砲台";
-                optEl.className = "text-yellow-400 font-bold animate-pulse";
+                optEl.className = "text-yellow-300 font-bold animate-pulse";
             } else if (player.weaponLevel >= 9) {
                 optEl.innerText = "四僚機重火力陣型 (4 Options)";
                 optEl.className = "text-cyan-300 font-bold";
@@ -967,8 +976,8 @@
                 optEl.innerText = "雙僚機已激活 (2 Options)";
                 optEl.className = "text-green-400 font-bold";
             } else {
-                optEl.innerText = "標準子彈 (Lv.5解鎖僚機)";
-                optEl.className = "text-slate-400";
+                optEl.innerText = "標準雙發 (Lv.5解鎖僚機)";
+                optEl.className = "text-slate-300";
             }
         }
 
@@ -982,8 +991,7 @@
 
         function triggerStageClear() {
             gameState = 'STAGE_CLEAR';
-            // Award +1 extra life upon clearing each stage
-            lives++;
+            lives++; // +1 extra life reward upon stage completion
             document.getElementById('screen-stage-clear').classList.remove('hidden');
             document.getElementById('stage-clear-bonus').innerText = `關卡獎勵: +${currentStage * 3000} 分`;
             document.getElementById('stage-clear-life').innerText = `❤️ 成功通關！額外獎勵生命 +1 (現有: ${lives})`;
@@ -1021,7 +1029,7 @@
                 drawPixelRect(ctx, b.x, b.y, b.w, b.h, '#facc15');
             }
 
-            // High-contrast bullet rendering for Stage 3 & general clarity
+            // High-contrast bullet rendering for Stage 3 & dark backgrounds
             for (let eb of enemyBullets) {
                 drawPixelRect(ctx, eb.x - 1, eb.y - 1, eb.w + 2, eb.h + 2, '#ffffff');
                 drawPixelRect(ctx, eb.x, eb.y, eb.w, eb.h, '#fde047');
