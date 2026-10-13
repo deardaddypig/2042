@@ -31,7 +31,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2042 Arcade - 雷霆戰機</title>
+    <title>2042 Arcade - 雷霆戰機 🛦</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
@@ -88,8 +88,8 @@
 
     <div id="game-container" class="relative w-full max-w-[480px] h-full max-h-[880px] bg-slate-900 border-4 border-red-600 rounded-lg arcade-shadow flex flex-col overflow-hidden">
         
-        <!-- Top HUD Header -->
-        <div class="bg-black bg-opacity-95 px-3 py-2 border-b-2 border-red-800 flex justify-between items-center text-[10px] md:text-xs z-25">
+        <!-- Top HUD Info Bar (Strictly placed above progress bar) -->
+        <div class="bg-black bg-opacity-95 px-3 py-2 border-b-2 border-red-800 flex justify-between items-center text-[10px] md:text-xs z-30">
             <div>
                 <span class="text-yellow-400">SCORE:</span> <span id="hud-score" class="text-white">000000</span>
             </div>
@@ -112,7 +112,7 @@
         </div>
 
         <!-- Boss Health Bar Container -->
-        <div id="boss-hud" class="hidden absolute top-14 left-4 right-4 bg-black bg-opacity-90 border-2 border-red-600 p-2 rounded z-30">
+        <div id="boss-hud" class="hidden absolute top-16 left-4 right-4 bg-black bg-opacity-90 border-2 border-red-600 p-2 rounded z-35">
             <div class="flex justify-between text-[10px] text-red-400 mb-1">
                 <span id="boss-name">BOSS: IRON FORTRESS</span>
                 <span id="boss-hp-text">100%</span>
@@ -123,25 +123,25 @@
         </div>
 
         <!-- Boss Warning Banner -->
-        <div id="boss-warning-banner" class="hidden absolute inset-x-0 top-32 bg-red-950 bg-opacity-95 border-y-4 border-yellow-400 py-3 text-center z-35 boss-warning-anim">
+        <div id="boss-warning-banner" class="hidden absolute inset-x-0 top-32 bg-red-950 bg-opacity-95 border-y-4 border-yellow-400 py-3 text-center z-40 boss-warning-anim">
             <div class="text-yellow-300 text-sm md:text-base font-bold tracking-widest">⚠️ 警告：BOSS逼近！⚠️</div>
             <div id="boss-warning-sub" class="text-[10px] text-white mt-1">準備迎戰</div>
         </div>
 
-        <!-- Game Canvas Viewport -->
         <div class="relative flex-1 w-full h-full overflow-hidden bg-slate-950 scanline">
             <canvas id="gameCanvas" class="w-full h-full block"></canvas>
 
             <!-- Start Screen Overlay -->
-            <div id="screen-start" class="absolute inset-0 bg-black bg-opacity-92 flex flex-col items-center justify-center p-6 text-center z-40">
-                <div class="text-red-500 text-2xl md:text-3xl font-bold mb-2 tracking-widest drop-shadow-[0_5px_5px_rgba(255,0,0,0.6)]">2042: 雷霆戰機</div>
-                <div class="text-xs text-yellow-400 mb-3">極致流暢・高對比子彈・十級武器・四僚機・通關獎勵生命</div>
+            <div id="screen-start" class="absolute inset-0 bg-black bg-opacity-92 flex flex-col items-center justify-center p-6 text-center z-50">
+                <div class="text-red-500 text-xl md:text-2xl font-bold mb-2 tracking-widest drop-shadow-[0_5px_5px_rgba(255,0,0,0.6)]">🛦 2042: 雷霆戰機 🛦</div>
+                <div class="text-[10px] text-yellow-400 mb-3">15級武器・閃電激光・通關獎勵</div>
                 <div class="text-[9px] text-slate-300 max-w-xs mb-5 space-y-1 leading-relaxed text-left bg-slate-900/90 p-3 rounded border border-slate-700">
-                    <p>🕹️ <span class="text-yellow-300">移動</span>：方向鍵 / WASD / 觸控拖拽</p>
+                    <p>🕹️ <span class="text-yellow-300">移動</span>：觸控拖拽 (<span class="text-cyan-400">防手指遮擋</span>)</p>
                     <p>🔫 <span class="text-yellow-300">射擊</span>：<span class="text-green-400">全自動連續開火</span></p>
-                    <p>🎁 <span class="text-yellow-300">POW</span>：擊落紅機獲取升級 </p>
-                    <p>✈️ <span class="text-yellow-300">僚機</span>：Lv.5-8 雙僚機；<span class="text-blue-400 font-bold">Lv.9-10 四僚機陣型</span></p>
-                    <p>❤️ <span class="text-yellow-300">獎勵</span>：<span class="text-green-400 font-bold">每成功通關一次，額外獎勵 +1 生命！</span></p>
+                    <p>🎁 <span class="text-yellow-300">POW</span>：擊落紅機獲取升級</p>
+                    <p>✈️ <span class="text-yellow-300">僚機</span>：Lv.5 雙僚機；Lv.9 四僚機</p>
+                    <p>⚡ <span class="text-yellow-300 font-bold">Lv.15</span>：解鎖<span class="text-yellow-300 font-bold">黃色閃電激光</span>持續轟炸！</p>
+                    <p>❤️ <span class="text-yellow-300">獎勵</span>：<span class="text-green-400 font-bold">每關通關獎勵生命 +1！</span></p>
                 </div>
                 <button id="btn-start" class="retro-btn text-white font-bold py-3 px-8 rounded text-sm uppercase tracking-wider">
                     開始戰鬥 START
@@ -149,7 +149,7 @@
             </div>
 
             <!-- Pause Menu Overlay -->
-            <div id="screen-pause" class="absolute inset-0 bg-black bg-opacity-80 hidden flex-col items-center justify-center p-6 text-center z-40">
+            <div id="screen-pause" class="absolute inset-0 bg-black bg-opacity-80 hidden flex-col items-center justify-center p-6 text-center z-50">
                 <div class="text-yellow-400 text-xl font-bold mb-6">遊戲暫停 PAUSED</div>
                 <div class="space-y-4">
                     <button id="btn-resume" class="retro-btn text-white font-bold py-2 px-6 rounded text-xs">繼續遊戲 RESUME</button>
@@ -158,7 +158,7 @@
             </div>
 
             <!-- Stage Clear Overlay -->
-            <div id="screen-stage-clear" class="absolute inset-0 bg-black bg-opacity-85 hidden flex-col items-center justify-center p-6 text-center z-40">
+            <div id="screen-stage-clear" class="absolute inset-0 bg-black bg-opacity-85 hidden flex-col items-center justify-center p-6 text-center z-50">
                 <div class="text-green-400 text-lg md:text-xl font-bold mb-2 animate-bounce">關卡完成 STAGE CLEAR!</div>
                 <div id="stage-clear-bonus" class="text-xs text-yellow-300 mb-2">獎勵分數: +5000</div>
                 <div id="stage-clear-life" class="text-xs text-green-300 mb-6 font-bold">❤️ 額外獎勵生命 +1</div>
@@ -166,15 +166,15 @@
             </div>
 
             <!-- Game Over Overlay -->
-            <div id="screen-gameover" class="absolute inset-0 bg-black bg-opacity-92 hidden flex-col items-center justify-center p-6 text-center z-40">
+            <div id="screen-gameover" class="absolute inset-0 bg-black bg-opacity-92 hidden flex-col items-center justify-center p-6 text-center z-50">
                 <div class="text-red-600 text-2xl font-bold mb-2 tracking-widest">GAME OVER</div>
                 <div class="text-xs text-slate-300 mb-6">最終得分: <span id="final-score" class="text-yellow-400">0</span></div>
                 <button id="btn-restart-over" class="retro-btn text-white font-bold py-3 px-8 rounded text-xs">再次挑戰 RETRY</button>
             </div>
 
             <!-- Victory Overlay -->
-            <div id="screen-victory" class="absolute inset-0 bg-black bg-opacity-95 hidden flex-col items-center justify-center p-6 text-center z-40">
-                <div class="text-yellow-400 text-xl md:text-2xl font-bold mb-3 animate-pulse">🏆 取得完全勝利! VICTORY!</div>
+            <div id="screen-victory" class="absolute inset-0 bg-black bg-opacity-95 hidden flex-col items-center justify-center p-6 text-center z-50">
+                <div class="text-yellow-400 text-xl md:text-2xl font-bold mb-3 animate-pulse">嘩嘩嘩！🏆 取得完全勝利! VICTORY!</div>
                 <div class="text-[10px] text-slate-300 mb-4">你已成功擊潰全部五大帝國艦隊與最終旗艦！</div>
                 <div class="text-xs text-green-400 mb-6">最終總得分: <span id="victory-score" class="text-white">0</span></div>
                 <button id="btn-restart-victory" class="retro-btn text-white font-bold py-3 px-8 rounded text-xs">凱旋重玩 PLAY AGAIN</button>
@@ -182,9 +182,9 @@
         </div>
 
         <!-- Footer Bar -->
-        <div class="bg-black bg-opacity-95 px-4 py-2 border-t-2 border-red-800 flex justify-between items-center z-25">
+        <div class="bg-black bg-opacity-95 px-4 py-2 border-t-2 border-red-800 flex justify-between items-center z-30">
             <div class="text-[10px] text-yellow-400">武器等級: <span id="hud-weapon" class="text-white font-bold">Lv.1</span></div>
-            <div class="text-[10px] text-blue-400">僚機狀態: <span id="hud-options" class="text-slate-400">無</span></div>
+            <div class="text-[10px] text-blue-400">火力配置: <span id="hud-options" class="text-slate-400">標準子彈</span></div>
             <button id="btn-pause-toggle" class="bg-slate-800 border border-slate-600 text-white text-[10px] px-3 py-1 rounded hover:bg-slate-700">暫停</button>
         </div>
     </div>
@@ -219,6 +219,22 @@
                     gain.connect(this.ctx.destination);
                     osc.start();
                     osc.stop(this.ctx.currentTime + 0.07);
+                } catch(e) {}
+            }
+            playLaser() {
+                if (!this.ctx) return;
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(950, this.ctx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(450, this.ctx.currentTime + 0.05);
+                    gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.005, this.ctx.currentTime + 0.05);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.05);
                 } catch(e) {}
             }
             playExplosion(isBoss = false) {
@@ -333,7 +349,6 @@
         let activeBoss = null;
         let bossSpawned = false;
 
-        // Input Handling
         window.addEventListener('keydown', e => {
             keys[e.code] = true;
             if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
@@ -358,9 +373,10 @@
             const scaleX = V_WIDTH / rect.width;
             const scaleY = V_HEIGHT / rect.height;
             const touchX = (e.clientX - rect.left) * scaleX;
-            const touchY = (e.clientY - rect.top) * scaleY;
-            player.x += (touchX - (player.x + player.w/2)) * 0.35;
-            player.y += (touchY - (player.y + player.h/2)) * 0.35;
+            // -115px vertical offset ensures fighter stays well above the finger for clear view
+            const touchY = (e.clientY - rect.top) * scaleY - 115;
+            player.x += (touchX - (player.x + player.w/2)) * 0.4;
+            player.y += (touchY - (player.y + player.h/2)) * 0.4;
         }
 
         function drawPixelRect(ctx, x, y, w, h, color) {
@@ -400,11 +416,36 @@
                 renderCompanion(x - 36, y + 8);
                 renderCompanion(x + 42, y + 8);
             } else if (p.weaponLevel >= 9) {
-                // 4 Companion Option Planes formation (Lv.9+)
                 renderCompanion(x - 34, y + 8);
                 renderCompanion(x + 40, y + 8);
                 renderCompanion(x - 64, y + 16);
                 renderCompanion(x + 70, y + 16);
+            }
+
+            // Level 15 Ultimate Weapon: Yellow Lightning Laser Beam (黃色閃電激光)
+            if (p.weaponLevel >= 15) {
+                ctx.save();
+                const laserX = x + p.w / 2 - 3;
+                ctx.fillStyle = '#fef08a';
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#facc15';
+                ctx.beginPath();
+                ctx.moveTo(laserX + 3, y);
+                let curY = y;
+                let curX = laserX + 3;
+                while (curY > 0) {
+                    curY -= 25;
+                    curX += (Math.random() - 0.5) * 16;
+                    ctx.lineTo(curX, curY);
+                }
+                ctx.lineWidth = 6;
+                ctx.strokeStyle = '#facc15';
+                ctx.stroke();
+
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
             }
 
             if (p.shield) {
@@ -518,7 +559,7 @@
                 shootCooldown--;
             } else {
                 firePlayerBullets();
-                shootCooldown = Math.max(6, 13 - Math.floor(player.weaponLevel / 2));
+                shootCooldown = Math.max(4, 12 - Math.floor(player.weaponLevel / 2));
             }
 
             if (player.shield) {
@@ -529,7 +570,11 @@
         }
 
         function firePlayerBullets() {
-            sfx.playShoot();
+            if (player.weaponLevel >= 15) {
+                sfx.playLaser();
+            } else {
+                sfx.playShoot();
+            }
             const px = player.x + player.w / 2;
             const py = player.y;
             const lvl = player.weaponLevel;
@@ -539,7 +584,7 @@
             } else if (lvl === 2) {
                 bullets.push({ x: px - 10, y: py, w: 6, h: 14, dx: 0, dy: -11, fromPlayer: true });
                 bullets.push({ x: px + 4, y: py, w: 6, h: 14, dx: 0, dy: -11, fromPlayer: true });
-            } else if (lvl === 3 || lvl === 4) {
+            } else if (lvl >= 3 && lvl <= 4) {
                 bullets.push({ x: px - 3, y: py, w: 6, h: 14, dx: 0, dy: -12, fromPlayer: true });
                 bullets.push({ x: px - 14, y: py + 4, w: 6, h: 14, dx: -2, dy: -11, fromPlayer: true });
                 bullets.push({ x: px + 8, y: py + 4, w: 6, h: 14, dx: 2, dy: -11, fromPlayer: true });
@@ -549,8 +594,7 @@
                 bullets.push({ x: px + 10, y: py + 4, w: 6, h: 14, dx: 2.5, dy: -11, fromPlayer: true });
                 bullets.push({ x: player.x - 32, y: player.y + 10, w: 5, h: 12, dx: 0, dy: -12, fromPlayer: true });
                 bullets.push({ x: player.x + player.w + 27, y: player.y + 10, w: 5, h: 12, dx: 0, dy: -12, fromPlayer: true });
-            } else {
-                // Lv.9-10: 4 Companion Option Planes & HeavySpread
+            } else if (lvl >= 9 && lvl <= 14) {
                 bullets.push({ x: px - 3, y: py, w: 6, h: 16, dx: 0, dy: -14, fromPlayer: true });
                 bullets.push({ x: px - 16, y: py, w: 6, h: 14, dx: -3, dy: -12, fromPlayer: true });
                 bullets.push({ x: px + 10, y: py, w: 6, h: 14, dx: 3, dy: -12, fromPlayer: true });
@@ -560,6 +604,17 @@
                 bullets.push({ x: player.x + player.w + 24, y: player.y + 8, w: 6, h: 14, dx: 1, dy: -13, fromPlayer: true });
                 bullets.push({ x: player.x - 60, y: player.y + 16, w: 6, h: 14, dx: -1.5, dy: -13, fromPlayer: true });
                 bullets.push({ x: player.x + player.w + 54, y: player.y + 16, w: 6, h: 14, dx: 1.5, dy: -13, fromPlayer: true });
+            } else {
+                // Level 15: Ultimate Multi-Spread + Yellow Lightning Laser
+                bullets.push({ x: px - 3, y: py, w: 8, h: 18, dx: 0, dy: -16, fromPlayer: true });
+                bullets.push({ x: px - 20, y: py, w: 6, h: 16, dx: -3.5, dy: -14, fromPlayer: true });
+                bullets.push({ x: px + 14, y: py, w: 6, h: 16, dx: 3.5, dy: -14, fromPlayer: true });
+                bullets.push({ x: px - 36, y: py + 4, w: 6, h: 14, dx: -6, dy: -12, fromPlayer: true });
+                bullets.push({ x: px + 30, y: py + 4, w: 6, h: 14, dx: 6, dy: -12, fromPlayer: true });
+                bullets.push({ x: player.x - 32, y: player.y + 8, w: 6, h: 14, dx: -1, dy: -15, fromPlayer: true });
+                bullets.push({ x: player.x + player.w + 26, y: player.y + 8, w: 6, h: 14, dx: 1, dy: -15, fromPlayer: true });
+                bullets.push({ x: player.x - 64, y: player.y + 16, w: 6, h: 14, dx: -2, dy: -14, fromPlayer: true });
+                bullets.push({ x: player.x + player.w + 58, y: player.y + 16, w: 6, h: 14, dx: 2, dy: -14, fromPlayer: true });
             }
         }
 
@@ -724,7 +779,7 @@
         }
 
         function dropPow(x, y, isPowRed = false) {
-            // 50% reduced POW drop rate per user specification
+            // 50% reduced POW drop rate per specs
             if (isPowRed && Math.random() < 0.25) {
                 powItems.push({ x: x, y: y, w: 24, h: 24, dy: 1.6 });
             } else if (!isPowRed && Math.random() < 0.075) {
@@ -761,7 +816,7 @@
                 if (rectIntersect(player, pow)) {
                     sfx.playPowerup();
                     score += 600;
-                    if (player.weaponLevel < 10) {
+                    if (player.weaponLevel < 15) {
                         player.weaponLevel++;
                     } else {
                         player.shield = true;
@@ -778,6 +833,34 @@
                 p.y += p.dy;
                 p.life--;
                 if (p.life <= 0) particles.splice(i, 1);
+            }
+
+            // Level 15 Lightning Laser continuous damage beam handling
+            if (player.weaponLevel >= 15) {
+                const laserBox = { x: player.x + player.w/2 - 12, y: 0, w: 24, h: player.y };
+                if (activeBoss && rectIntersect(laserBox, activeBoss)) {
+                    activeBoss.hp -= 0.6;
+                    updateBossHpBar();
+                    if (activeBoss.hp <= 0) {
+                        createExplosion(activeBoss.x + activeBoss.w/2, activeBoss.y + activeBoss.h/2, true);
+                        score += 8000 * currentStage;
+                        activeBoss = null;
+                        document.getElementById('boss-hud').classList.add('hidden');
+                        triggerStageClear();
+                    }
+                }
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    let e = enemies[j];
+                    if (rectIntersect(laserBox, e)) {
+                        e.hp -= 0.8;
+                        if (e.hp <= 0) {
+                            createExplosion(e.x + e.w/2, e.y + e.h/2);
+                            score += e.type === 'bomber' ? 350 : (e.type === 'powRed' ? 500 : 120);
+                            dropPow(e.x, e.y, e.type === 'powRed');
+                            enemies.splice(j, 1);
+                        }
+                    }
+                }
             }
 
             for (let i = bullets.length - 1; i >= 0; i--) {
@@ -874,14 +957,17 @@
         function updateWeaponHUD() {
             document.getElementById('hud-weapon').innerText = 'Lv.' + player.weaponLevel;
             const optEl = document.getElementById('hud-options');
-            if (player.weaponLevel >= 9) {
-                optEl.innerText = "四僚機究極陣型 (4 Options)";
+            if (player.weaponLevel >= 15) {
+                optEl.innerText = "⚡ Lv.15 閃電激光究極砲台";
                 optEl.className = "text-yellow-400 font-bold animate-pulse";
+            } else if (player.weaponLevel >= 9) {
+                optEl.innerText = "四僚機重火力陣型 (4 Options)";
+                optEl.className = "text-cyan-300 font-bold";
             } else if (player.weaponLevel >= 5) {
                 optEl.innerText = "雙僚機已激活 (2 Options)";
                 optEl.className = "text-green-400 font-bold";
             } else {
-                optEl.innerText = "無 (Lv.5解鎖)";
+                optEl.innerText = "標準子彈 (Lv.5解鎖僚機)";
                 optEl.className = "text-slate-400";
             }
         }
@@ -935,7 +1021,7 @@
                 drawPixelRect(ctx, b.x, b.y, b.w, b.h, '#facc15');
             }
 
-            // High-contrast bullet rendering for Stage 3 & general visibility
+            // High-contrast bullet rendering for Stage 3 & general clarity
             for (let eb of enemyBullets) {
                 drawPixelRect(ctx, eb.x - 1, eb.y - 1, eb.w + 2, eb.h + 2, '#ffffff');
                 drawPixelRect(ctx, eb.x, eb.y, eb.w, eb.h, '#fde047');
@@ -1020,7 +1106,6 @@
             updateWeaponHUD();
         }
 
-        // Attach DOM Event Listeners
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btn-start').addEventListener('click', startGame);
             document.getElementById('btn-resume').addEventListener('click', togglePause);
